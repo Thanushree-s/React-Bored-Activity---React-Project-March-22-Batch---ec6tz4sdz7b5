@@ -1,32 +1,42 @@
-import React ,{useState,useEffect}from 'react'
-import '../styles/App.css';
+import React, { useState, useEffect } from "react";
+import "../styles/App.css";
 
-const Loader = () => <div id="loader">Loading...</div>
-
+const Loader = () => <div id="loader">Loading...</div>;
 
 const App = () => {
-  let [activity,setActivity] = useState('');
-  let [type,setType] = useState('education');
-  let [loading,setLoading] = useState(false);
-  async function fetching(){
-    setLoading(true);
-    const data = await fetch(`http://www.boredapi.com/api/activity?type=${type}`)
-    const res = await data.json();
-    setActivity(res.activity);
-    setLoading(false)
+  // function for url link
+  function makeURL(type) {
+    console.log(type);
+    return `https://www.boredapi.com/api/activity?type=${type}`;
   }
-  useEffect(()=>{
-   fetching();
-  },[type])
+  // We can use two types
+  // recreational or education.
+  //
+  const [activity, setActivity] = useState(null);
+
+  async function getResponse(z) {
+    setActivity(null);
+
+    let a = makeURL(z);
+
+    const response = await fetch(a);
+    let data = await response.json();
+    setActivity(data.activity);
+  }
+
+  useEffect(() => getResponse("education"), []);
 
   return (
     <div id="main">
-    {loading ? <Loader /> : `<div id="activity">${activity}</div>`}
-    <button id="btn-recreation" onClick={()=>setType('recreational')}>recreational</button>
-    <button id="btn-education" onClick={()=>setType('education')}>education</button>
+      {activity ? <div id="activity"> {activity}</div> : <Loader />}
+      <button id="btn-recreation" onClick={() => getResponse("recreational")}>
+        Recreational
+      </button>
+      <button id="btn-education" onClick={() => getResponse("education")}>
+        Education
+      </button>
     </div>
-  )
-}
-
+  );
+};
 
 export default App;
