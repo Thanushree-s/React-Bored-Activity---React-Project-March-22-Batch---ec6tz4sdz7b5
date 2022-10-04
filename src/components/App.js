@@ -10,7 +10,7 @@ const App = () => {
   let [loading,setLoading] = useState(false);
   async function fetching(){
     setLoading(true);
-    const data = await fetch(`https://www.boredapi.com/api/activity?type=${type}`)
+    const data = await fetch(`http://www.boredapi.com/api/activity?type=${type}`)
     const res = await data.json();
     setActivity(res.activity);
     setLoading(false)
@@ -21,7 +21,7 @@ const App = () => {
 
   return (
     <div id="main">
-   {loading ? <Loader /> : (<div id="activity">{activity}</div>)}
+    {loading ? <Loader /> : `<div id="activity">${activity}</div>`}
     <button id="btn-recreation" onClick={()=>setType('recreational')}>recreational</button>
     <button id="btn-education" onClick={()=>setType('education')}>education</button>
     </div>
